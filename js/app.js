@@ -18,6 +18,7 @@
  * 
 */
 const navBarList = document.querySelector('#navbar__list');
+const sections = fetchSections();
 
 /**
  * End Global Variables
@@ -32,12 +33,10 @@ function fetchSections(){
 
 function createNavList(){
     const fragment = document.createDocumentFragment();
-    const sections = fetchSections();
 
     for(const section of sections){
         const list = document.createElement('li');
-        list.className = 'menu__link'
-        list.insertAdjacentHTML('afterbegin', `<a href=#${section.id}>${section.dataset.nav}</a>`);
+        list.insertAdjacentHTML('afterbegin', `<a href=#${section.id} class="menu__link">${section.dataset.nav}</a>`);
         fragment.appendChild(list);
         console.log(`create link ${section.dataset.nav}`);
     }
@@ -50,24 +49,14 @@ function checkCurrentPositionTop(section){
     console.log('check');
     const top = section.getBoundingClientRect().top;
     console.log(`${section.id}, ${top}`);
-    if(top > 0 & top <= 500){
+    if(top >= 0 & top <= 500){
         return true;
     }else{
         return false;
     }
 }
 
-function removeActiveSectionClass(section){
-    if(!checkCurrentPositionTop(section)){
-        section.classList.remove('your-active-class');
-        console.log('remove active class');
-    }else{
-        return;
-    }
-}
-
 function addActiveSectionClass(){
-    const sections = fetchSections();
             for(const section of sections){
                 if(checkCurrentPositionTop(section)){
                     section.classList.add('your-active-class');
@@ -78,7 +67,7 @@ function addActiveSectionClass(){
 }
 
 
- function activeSectionClass(){
+function activeSectionClass(){
         console.log("scrolled");
         const currentActiveSection = document.querySelector('.your-active-class');
         console.log(currentActiveSection);
@@ -92,7 +81,25 @@ function addActiveSectionClass(){
             }else{
                 addActiveSectionClass();
             }
-     }
+    }
+
+function scrollToSection(event){
+    event.preventDefault();
+    const href = event.target.getAttribute('href');
+    if(href !== null){
+        console.log(`clicked ${href.replace('#','')}`);
+        const targetSection = document.getElementById(href.replace('#',''));
+        const rect = targetSection.getBoundingClientRect().top;
+        const offset = window.pageYOffset;
+        const headerOffset = document.querySelector('.page__header').offsetHeight;
+        const position = rect + offset - headerOffset;
+        console.log(position);
+        window.scrollTo({
+            top: position,
+            behavior: 'smooth'
+        })
+    }
+}
 
 /**
  * End Helper Functions
@@ -107,8 +114,7 @@ createNavList();
 window.addEventListener('scroll', activeSectionClass);
 
 // Scroll to anchor ID using scrollTO event
-
-
+navBarList.addEventListener('click', scrollToSection);
 /**
  * End Main Functions
  * Begin Events
