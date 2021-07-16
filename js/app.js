@@ -18,18 +18,12 @@
  * 
 */
 const navBarList = document.querySelector('#navbar__list');
-const sections = fetchSections();
-
+const sections = document.querySelectorAll('section');
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
-
-function fetchSections(){
-    console.log('fetch sections');
-    return document.querySelectorAll('section');
-}
 
 function createNavList(){
     const fragment = document.createDocumentFragment();
@@ -56,10 +50,14 @@ function checkCurrentPositionTop(section){
     }
 }
 
+
 function addActiveSectionClass(){
             for(const section of sections){
                 if(checkCurrentPositionTop(section)){
                     section.classList.add('your-active-class');
+                    const anchor = document.querySelector(`a[href="#${section.id}"]`);
+                    console.log('anchor is ' + anchor);
+                    anchor.classList.add('active-link');
                     console.log(`${section.id} is active`);
                     return;
                 }
@@ -76,7 +74,10 @@ function activeSectionClass(){
                     return;
                 }else{
                     currentActiveSection.classList.remove('your-active-class');
+                    const anchor = document.querySelector('.active-link');
+                    anchor.classList.remove('active-link');
                     console.log('remove active class');
+                    
                 }
             }else{
                 addActiveSectionClass();
@@ -115,6 +116,7 @@ window.addEventListener('scroll', activeSectionClass);
 
 // Scroll to anchor ID using scrollTO event
 navBarList.addEventListener('click', scrollToSection);
+
 /**
  * End Main Functions
  * Begin Events

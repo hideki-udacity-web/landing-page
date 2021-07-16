@@ -88,6 +88,11 @@ section {
     transition: ease 0.3s all;
 }
 
+.active-link{
+    background: rgba(51, 51, 51, 0.2);
+    transition: ease 0.3s all;
+}
+
 /* Header Styles */
 .page__header {
     background: #fff;
