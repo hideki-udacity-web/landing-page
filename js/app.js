@@ -34,26 +34,29 @@ function createNavList(){
         fragment.appendChild(list);
         console.log(`create link ${section.dataset.nav}`);
     }
-
     navBarList.appendChild(fragment);
     console.log('createNavList');
 }
 
-function checkCurrentPositionTop(section){
+function checkCurrentPosition(section){
     console.log('check');
-    const top = section.getBoundingClientRect().top;
-    console.log(`${section.id}, ${top}`);
-    if(top >= 0 & top <= 500){
+    const scroll = window.pageYOffset;
+    const top = Math.round(section.getBoundingClientRect().top + scroll);
+    const bottom = Math.round(section.getBoundingClientRect().bottom + scroll);
+    const headerOffset = document.querySelector('.page__header').offsetHeight; 
+    const th = scroll + headerOffset;
+    if(top <= th & th < bottom){
+        console.log(`this is active${section.id}`);
+        console.log(`top: ${top}, bottom: ${bottom}, th: ${th}`);
         return true;
     }else{
         return false;
     }
 }
 
-
-function addActiveSectionClass(){
+function addActiveClass(){
             for(const section of sections){
-                if(checkCurrentPositionTop(section)){
+                if(checkCurrentPosition(section)){
                     section.classList.add('your-active-class');
                     const anchor = document.querySelector(`a[href="#${section.id}"]`);
                     console.log('anchor is ' + anchor);
@@ -64,25 +67,22 @@ function addActiveSectionClass(){
             }
 }
 
-
 function activeSectionClass(){
-        console.log("scrolled");
-        const currentActiveSection = document.querySelector('.your-active-class');
-        console.log(currentActiveSection);
-            if(currentActiveSection !== null){
-                if(checkCurrentPositionTop(currentActiveSection)){
-                    return;
-                }else{
-                    currentActiveSection.classList.remove('your-active-class');
-                    const anchor = document.querySelector('.active-link');
-                    anchor.classList.remove('active-link');
-                    console.log('remove active class');
-                    
-                }
-            }else{
-                addActiveSectionClass();
-            }
+    console.log("scroll");
+    const current =  document.querySelector('.your-active-class');
+    if(current !== null){
+        if(checkCurrentPosition(current)){
+            return;
+        }else{
+            current.classList.remove('your-active-class');
+            const anchor = document.querySelector('.active-link');
+            anchor.classList.remove('active-link');
+            console.log('remove active class');
+            addActiveClass();
+        }
     }
+    addActiveClass();
+}
 
 function scrollToSection(event){
     event.preventDefault();
