@@ -19,6 +19,8 @@
 */
 const navBarList = document.querySelector('#navbar__list');
 const sections = document.querySelectorAll('section');
+let beforePosition = 0;
+let lastPosition = 0;
 /**
  * End Global Variables
  * Start Helper Functions
@@ -102,6 +104,23 @@ function scrollToSection(event){
     }
 }
 
+function headerAnimation(){
+    const pageHeader = document.querySelector('.page__header');
+    const th = pageHeader.clientHeight;
+    const winH = window.innerHeight;
+    const docH = document.documentElement.scrollHeight;
+    const bottom = docH - winH;
+
+    console.log('head anime')
+    if(beforePosition > th && beforePosition > lastPosition){
+        pageHeader.classList.add('header-updown');
+    }
+    if(beforePosition < th || beforePosition < lastPosition || bottom <= beforePosition){
+        pageHeader.classList.remove('header-updown');
+    }
+    lastPosition = beforePosition;
+}
+
 /**
  * End Helper Functions
  * Begin Main Functions
@@ -116,6 +135,11 @@ window.addEventListener('scroll', activeSectionClass);
 
 // Scroll to anchor ID using scrollTO event
 navBarList.addEventListener('click', scrollToSection);
+
+window.addEventListener('scroll', ()=> {
+    beforePosition = window.pageYOffset;
+    headerAnimation();
+});
 
 /**
  * End Main Functions
