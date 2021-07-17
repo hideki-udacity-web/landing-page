@@ -104,22 +104,46 @@ function scrollToSection(event){
     }
 }
 
-function headerAnimation(){
+function btnClick(){
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
+}
+
+function scrollAnimation(){
     const pageHeader = document.querySelector('.page__header');
+    const btn = document.querySelector('button');
     const th = pageHeader.clientHeight;
+    
+    headerAnimation(pageHeader, th);
+    btnAnimation(btn, th);
+
+    lastPosition = beforePosition;
+}
+
+function btnAnimation(btn, th){
+    if(beforePosition > th && beforePosition > lastPosition){
+        btn.classList.remove('btn-upDown');
+    }
+    if(beforePosition < th || beforePosition < lastPosition){
+        btn.classList.add('btn-upDown');
+    }
+}
+
+function headerAnimation(header, th){
     const winH = window.innerHeight;
     const docH = document.documentElement.scrollHeight;
     const bottom = docH - winH;
 
-    console.log('head anime')
     if(beforePosition > th && beforePosition > lastPosition){
-        pageHeader.classList.add('header-updown');
+        header.classList.add('header-upDown');
     }
     if(beforePosition < th || beforePosition < lastPosition || bottom <= beforePosition){
-        pageHeader.classList.remove('header-updown');
+        header.classList.remove('header-upDown');
     }
-    lastPosition = beforePosition;
 }
+
 
 /**
  * End Helper Functions
@@ -138,8 +162,10 @@ navBarList.addEventListener('click', scrollToSection);
 
 window.addEventListener('scroll', ()=> {
     beforePosition = window.pageYOffset;
-    headerAnimation();
+    scrollAnimation();
 });
+
+document.querySelector('button').onclick = btnClick;
 
 /**
  * End Main Functions
