@@ -60,7 +60,6 @@ section {
     min-height: 80vh;
 }
 
-
 /* ---- Module Rules ---- */
 
 /* Navigation Styles*/
@@ -135,7 +134,6 @@ section {
 .btn-upDown{
     transform: translateY(150%);
 }
-
 
 /* ---- Theme Rules ---- */
 /* Landing Container Styles */

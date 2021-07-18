@@ -21,12 +21,16 @@ const navBarList = document.querySelector('#navbar__list');
 const sections = document.querySelectorAll('section');
 let beforePosition = 0;
 let lastPosition = 0;
+let timeout = null;
 /**
  * End Global Variables
  * Start Helper Functions
  * 
 */
 
+/**
+ * Get the section and add it to the menu.
+ */
 function createNavList(){
     const fragment = document.createDocumentFragment();
 
@@ -40,6 +44,12 @@ function createNavList(){
     console.log('createNavList');
 }
 
+/**
+ * @param {Element} section 
+ * @returns boolean
+ * 
+ * Check that the position including the top of the window and the height of the header is within the height of the section.
+ */
 function checkCurrentPosition(section){
     console.log('check');
     const scroll = window.pageYOffset;
@@ -56,6 +66,9 @@ function checkCurrentPosition(section){
     }
 }
 
+/**
+ * Find the active section in the section node list and assign the class to the section and anchor.
+ */
 function addActiveClass(){
             for(const section of sections){
                 if(checkCurrentPosition(section)){
@@ -69,6 +82,11 @@ function addActiveClass(){
             }
 }
 
+/**
+ * Locate the currently active section when the screen is scrolled.
+ * If the active section is within the range, it will not be processed.
+ * If the current section is out of range, or if there is no active section, go find a section that can be active.
+ */
 function activeSectionClass(){
     console.log("scroll");
     const current =  document.querySelector('.your-active-class');
@@ -86,6 +104,11 @@ function activeSectionClass(){
     addActiveClass();
 }
 
+/**
+ * @param {*} event 
+ * 
+ * When the anchor is clicked, the screen will scroll to the target section.
+ */
 function scrollToSection(event){
     event.preventDefault();
     const href = event.target.getAttribute('href');
@@ -104,6 +127,9 @@ function scrollToSection(event){
     }
 }
 
+/**
+ * Go to the top of the page.
+ */
 function btnClick(){
         window.scrollTo({
             top: 0,
@@ -111,10 +137,17 @@ function btnClick(){
         })
 }
 
+/**
+ * The navigation bar will be fixed when the page is scrolled over the height of the navigation bar.
+ * Also, the navigation bar will be hidden when scrolling down and will be fixed when scrolling up.
+ * The navigation bar will also be fixed when the screen reaches the bottom of the page.
+ * Hide fixed navigation bar while not scrolling.
+ * Button will be displayed at that time.
+ */
 function scrollAnimation(){
     const pageHeader = document.querySelector('.page__header');
     const btn = document.querySelector('button');
-    const th = pageHeader.clientHeight;
+    const th = pageHeader.offsetHeight;
     
     headerAnimation(pageHeader, th);
     btnAnimation(btn, th);
@@ -135,15 +168,22 @@ function headerAnimation(header, th){
     const winH = window.innerHeight;
     const docH = document.documentElement.scrollHeight;
     const bottom = docH - winH;
-
+    if(timeout != null){
+        clearTimeout(timeout);
+        console.log('clear')
+    }
     if(beforePosition > th && beforePosition > lastPosition){
         header.classList.add('header-upDown');
     }
     if(beforePosition < th || beforePosition < lastPosition || bottom <= beforePosition){
         header.classList.remove('header-upDown');
+        timeout = setTimeout(() => {
+            header.classList.add('header-upDown')
+            console.log('add by timeout')
+            }, 2000);
     }
-}
 
+}
 
 /**
  * End Helper Functions
