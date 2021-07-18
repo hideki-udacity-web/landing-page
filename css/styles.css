@@ -60,7 +60,6 @@ section {
     min-height: 80vh;
 }
 
-
 /* ---- Module Rules ---- */
 
 /* Navigation Styles*/
@@ -88,6 +87,11 @@ section {
     transition: ease 0.3s all;
 }
 
+.active-link{
+    background: rgba(51, 51, 51, 0.2);
+    transition: ease 0.3s all;
+}
+
 /* Header Styles */
 .page__header {
     background: #fff;
@@ -95,6 +99,12 @@ section {
     top: 0;
     width: 100%;
     z-index: 5;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.header-upDown{
+    transform: translateY(-150%);
 }
 
 /* Footer Styles */
@@ -108,6 +118,22 @@ section {
     color: #fff;
 }
 
+.btn-to-top{
+    display: inline-block;
+    position: fixed;
+    background: #fff;
+    font-size: large;
+    padding: 1em;
+    bottom: 1em;
+    right: 1em;
+    border-radius: 50%;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.btn-upDown{
+    transform: translateY(150%);
+}
 
 /* ---- Theme Rules ---- */
 /* Landing Container Styles */
